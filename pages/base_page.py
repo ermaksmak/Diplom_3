@@ -1,22 +1,16 @@
-from typing import Any
-
 import allure
 from selenium.webdriver import ActionChains
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
-
 from locators.personal_account_locator import button_personal_account
 from url import URL
 from selenium.webdriver.support import expected_conditions as EC
-
 
 class BasePage:
 
     def __init__(self, browser):
         self.browser = browser
         self.actions = ActionChains(self.browser)
-        self.wait = WebDriverWait(self.browser, 100)
+        self.wait = WebDriverWait(self.browser, 20)
 
     @allure.step('Общий метод для получения атрибута элемента')
     def get_attribute_of_element(self, locator, attribute):

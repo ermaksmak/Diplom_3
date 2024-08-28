@@ -1,7 +1,6 @@
 import allure
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-
 from locators.constructor_locator import *
 from locators.order_feed_locator import completed_all_time
 from pages.base_page import BasePage

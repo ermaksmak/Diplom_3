@@ -6,6 +6,16 @@ from pages.order_feed_page import OrderFeedPage
 from pages.personal_account_page import PersonalAccountPage
 from url import URL, PROFILE
 from pages.base_page import *
+import pytest
+
+@pytest.fixture()
+def prepare_for_order(browser, create_and_delete_user):
+    response, payload = create_and_delete_user
+    email = payload['email']
+    password = payload['password']
+    order_history = PersonalAccountPage(browser)
+    auth = AuthorizationsPage(browser)
+    yield response, email, password, order_history, auth
 
 class TestOrderFeed:
 
@@ -21,14 +31,11 @@ class TestOrderFeed:
         with allure.step('Проверяем, что открылась окно с заказом'):
             assert order_details.get_popup_order_history().is_displayed()
 
-    @allure.step('заказы пользователя из раздела «История заказов» отображаются на странице «Лента заказов»,')
-    def test_user_order_history_displayed_on_order_feed(self, browser, create_and_delete_user):
-        response, payload = create_and_delete_user
-        email = payload['email']
-        password = payload['password']
+    @allure.step('заказы пользователя из раздела «История заказов» отображаются на странице «Лента заказов»')
+    def test_user_order_history_displayed_on_order_feed(self, browser, prepare_for_order):
+        response, email, password, order_history, auth = prepare_for_order
         user_order_history = OrderFeedPage(browser)
         constructor = ConstructorPage(browser)
-        auth = AuthorizationsPage(browser)
         personal_lk = PersonalAccountPage(browser)
         with allure.step('Открываем страницу c конструктором. Проходим авторизацию'):
             auth.login(email, password)
@@ -61,13 +68,10 @@ class TestOrderFeed:
 
 
     @allure.title('при создании нового заказа счётчик Выполнено за всё время увеличивается')
-    def test_orders_module_all_time_counter_increases(self, browser, create_and_delete_user):
-        response, payload = create_and_delete_user
-        email = payload['email']
-        password = payload['password']
+    def test_orders_module_all_time_counter_increases(self, browser, prepare_for_order):
+        response, email, password, order_history, auth = prepare_for_order
         orders_module_all_time = OrderFeedPage(browser)
         constructor = ConstructorPage(browser)
-        auth = AuthorizationsPage(browser)
         with allure.step('Открываем страницу c конструктором. Проходим авторизацию'):
             auth.login(email, password)
         with allure.step('Открываем страницу "Лента заказов"'):
@@ -83,13 +87,10 @@ class TestOrderFeed:
 
 
     @allure.title('при создании нового заказа счётчик Выполнено за сегодня увеличивается')
-    def test_create_new_order_increases_today_counter(self, browser, create_and_delete_user):
-        response, payload = create_and_delete_user
-        email = payload['email']
-        password = payload['password']
+    def test_create_new_order_increases_today_counter(self, browser, prepare_for_order):
+        response, email, password, order_history, auth = prepare_for_order
         today_counter = OrderFeedPage(browser)
         constructor = ConstructorPage(browser)
-        auth = AuthorizationsPage(browser)
         with allure.step('Открываем страницу c конструктором. Проходим авторизацию'):
             auth.login(email, password)
         with allure.step('Добавляем ожидание для загрузки страницы с конструктором'):
@@ -104,14 +105,11 @@ class TestOrderFeed:
         with allure.step('Проверяем, что новое значение не равно "count_number"'):
             assert today_counter.get_completed_today() != count_number
 
-    @allure.title('после оформления заказа его номер появляется в разделе В работе.')
-    def test_new_order_appears_in_work_section(self, browser, create_and_delete_user):
-        response, payload = create_and_delete_user
-        email = payload['email']
-        password = payload['password']
+    @allure.title('после оформления заказа его номер появляется в разделе "В работе".')
+    def test_new_order_appears_in_work_section(self, browser, prepare_for_order):
+        response, email, password, order_history, auth = prepare_for_order
         new_order_appears_in_work = OrderFeedPage(browser)
         constructor = ConstructorPage(browser)
-        auth = AuthorizationsPage(browser)
         with allure.step('Открываем страницу c конструктором. Проходим авторизацию'):
             auth.login(email, password)
         with allure.step('Добавляем ожидание для загрузки страницы с конструктором'):
