@@ -1,17 +1,8 @@
 import allure
 import pytest
-from pages.authorizations_page import AuthorizationsPage
-from pages.personal_account_page import PersonalAccountPage
 from url import URL, LOGIN, HISTORY
 
-@pytest.fixture()
-def prepare_for_personal_account(browser, create_and_delete_user):
-    response, payload = create_and_delete_user
-    email = payload['email']
-    password = payload['password']
-    personal_account = PersonalAccountPage(browser)
-    auth = AuthorizationsPage(browser)
-    yield response, email, password, personal_account, auth
+
 
 class TestPersonalAccount:
 

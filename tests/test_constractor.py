@@ -1,21 +1,7 @@
 import allure
-import pytest
-from pages.authorizations_page import AuthorizationsPage
-from pages.constructor_page import ConstructorPage
-from pages.order_feed_page import OrderFeedPage
 from data import DEFAULT_ORDER_NUMBER, INGREDIENT_DETAILS, COUNT_INGREDIENT
 from url import LOGIN, URL, FEED
 
-
-@pytest.fixture
-def prepare_for_constructor(browser, create_and_delete_user):
-    response, payload = create_and_delete_user
-    email = payload['email']
-    password = payload['password']
-    auth = AuthorizationsPage(browser)
-    constructor = ConstructorPage(browser)
-    order_feed_page = OrderFeedPage(browser)
-    yield response, email, password, auth, constructor, order_feed_page
 
 class TestToConstructor:
 

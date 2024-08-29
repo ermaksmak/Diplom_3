@@ -5,7 +5,6 @@ from locators.constructor_locator import *
 from locators.order_feed_locator import completed_all_time
 from pages.base_page import BasePage
 from pages.order_feed_page import OrderFeedPage
-from conftest import browser
 from url import URL
 
 

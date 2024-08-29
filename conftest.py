@@ -6,6 +6,11 @@ import os
 from helpers import generate_user_data
 from url import URL, CREATE_USER, DELETE_USER
 from selenium.webdriver.chrome.service import Service
+from pages.constructor_page import ConstructorPage
+from pages.order_feed_page import OrderFeedPage
+from pages.authorizations_page import AuthorizationsPage
+from pages.personal_account_page import PersonalAccountPage
+from pages.password_recovery_page import PasswordRecoveryPage
 
 
 # Добавляем путь к директории "pages"
@@ -40,3 +45,38 @@ def create_and_delete_user():
     yield response, payload
     access_token = response.json()['accessToken']
     requests.delete(URL + DELETE_USER, headers={'Authorization': access_token})
+
+@pytest.fixture
+def prepare_for_constructor(browser, create_and_delete_user):
+    response, payload = create_and_delete_user
+    email = payload['email']
+    password = payload['password']
+    auth = AuthorizationsPage(browser)
+    constructor = ConstructorPage(browser)
+    order_feed_page = OrderFeedPage(browser)
+    yield response, email, password, auth, constructor, order_feed_page
+
+@pytest.fixture()
+def prepare_for_order(browser, create_and_delete_user):
+    response, payload = create_and_delete_user
+    email = payload['email']
+    password = payload['password']
+    auth = AuthorizationsPage(browser)
+    order_feed_page = OrderFeedPage(browser)
+    personal_account = PersonalAccountPage(browser)
+    constructor = ConstructorPage(browser)
+    yield response, email, password, auth, order_feed_page, personal_account, constructor
+
+@pytest.fixture()
+def prepare_for_recovery_password(browser):
+    recovery_page = PasswordRecoveryPage(browser)
+    yield recovery_page
+
+@pytest.fixture()
+def prepare_for_personal_account(browser, create_and_delete_user):
+    response, payload = create_and_delete_user
+    email = payload['email']
+    password = payload['password']
+    personal_account = PersonalAccountPage(browser)
+    auth = AuthorizationsPage(browser)
+    yield response, email, password, personal_account, auth

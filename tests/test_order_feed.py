@@ -1,23 +1,11 @@
 from locators.order_feed_locator import number, completed_all_time
 from locators.personal_account_locator import order_history_item
-from pages.authorizations_page import AuthorizationsPage
-from pages.constructor_page import ConstructorPage
-from pages.order_feed_page import OrderFeedPage
-from pages.personal_account_page import PersonalAccountPage
 from url import URL, PROFILE
 from pages.base_page import *
-import pytest
+import allure
 
-@pytest.fixture()
-def prepare_for_order(browser, create_and_delete_user):
-    response, payload = create_and_delete_user
-    email = payload['email']
-    password = payload['password']
-    auth = AuthorizationsPage(browser)
-    order_feed_page = OrderFeedPage(browser)
-    personal_account = PersonalAccountPage(browser)
-    constructor = ConstructorPage(browser)
-    yield response, email, password, auth, order_feed_page, personal_account, constructor
+
+
 
 class TestOrderFeed:
 

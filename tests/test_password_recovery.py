@@ -1,13 +1,7 @@
 import allure
-import pytest
-from pages.password_recovery_page import PasswordRecoveryPage
-from url import LOGIN
-from url import URL, RESET_PASSWORD, FORGOT_PASSWORD
+from url import URL, RESET_PASSWORD, FORGOT_PASSWORD, LOGIN
 
-@pytest.fixture()
-def prepare_for_recovery_password(browser):
-    recovery_page = PasswordRecoveryPage(browser)
-    yield recovery_page
+
 class TestPasswordRecovery:
 
     @allure.title('переход на страницу восстановления пароля по кнопке «Восстановить пароль»,')
